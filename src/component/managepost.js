@@ -141,9 +141,9 @@ const ManagePosts = () => {
               <PeopleIcon sx={{ mr: 1 }} />
               <ListItemText primary="Manage User" />
             </ListItem>
-            <ListItem button component={Link} to="/manageposts" sx={{ color: '#fff' }}>
+            <ListItem button component={Link} to="/manageadd" sx={{ color: '#fff' }}>
               <AddCircleIcon sx={{ mr: 1 }} />
-              <ListItemText primary="Manage Posts" />
+              <ListItemText primary="Manage Advertisment" />
             </ListItem>
           </List>
         </Box>
