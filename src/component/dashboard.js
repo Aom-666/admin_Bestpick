@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
 import DashboardIcon from '@mui/icons-material/Dashboard'; // นำเข้า DashboardIcon
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import PeopleIcon from '@mui/icons-material/People';
+import AssignmentIcon from '@mui/icons-material/Assignment';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 
 // ลงทะเบียน `category` scale และส่วนประกอบอื่นๆ ที่ใช้ในกราฟ
@@ -69,12 +71,12 @@ const Dashboard = () => {
         <Toolbar sx={{ justifyContent: 'space-between', padding: '0 20px' }}>
           <Box display="flex" alignItems="center">
             <MenuIcon sx={{ mr: 2, cursor: 'pointer' }} onClick={handleMenuClick} /> {/* เพิ่ม onClick ที่นี่ */}
-            <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#ffffff' }}>
+            <Typography variant="h6" sx={{ color: '#ffffff' }}>
               Admin Dashboard
             </Typography>
           </Box>
           <Box>
-            <Button color="inherit" component={Link} to="/login" sx={{ fontWeight: 'bold' }}>
+            <Button color="inherit" component={Link} to="/login">
               LOGOUT
             </Button>
           </Box>
@@ -98,12 +100,16 @@ const Dashboard = () => {
               <ListItemText primary="Dashboard" />
             </ListItem>
             <ListItem button component={Link} to="/manageuser" sx={{ color: '#fff' }}>
-              <AddCircleIcon sx={{ mr: 1 }} />
+              <PeopleIcon sx={{ mr: 1 }} />
               <ListItemText primary="Manage Users" />
             </ListItem>
             <ListItem button component={Link} to="/manageadd" sx={{ color: '#fff' }}>
               <AddCircleIcon sx={{ mr: 1 }} />
               <ListItemText primary="Manage Advertisement" />
+            </ListItem>
+            <ListItem button component={Link} to="/managepost" sx={{ color: '#fff' }}>
+              <AssignmentIcon sx={{ mr: 1}} />
+              <ListItemText primary="Manage Post" />
             </ListItem>
           </List>
         </Box>

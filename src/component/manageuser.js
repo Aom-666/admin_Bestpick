@@ -6,6 +6,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import AssignmentIcon from '@mui/icons-material/Assignment';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
 
@@ -74,7 +75,7 @@ const ManageUsers = () => {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Manage Users
           </Typography>
-          <Button color="inherit">Logout</Button>
+          <Button color="inherit" component={Link} to="/login">Logout</Button>
         </Toolbar>
       </AppBar>
 
@@ -91,6 +92,10 @@ const ManageUsers = () => {
             <ListItem button component={Link} to={"/manageadd"} sx={{ color: '#fff' }}>
               <AddCircleIcon />
               <ListItemText primary="Manage Advertisements" />
+            </ListItem>
+            <ListItem button component={Link} to="/managepost" sx={{ color: '#fff' }}>
+              <AssignmentIcon sx={{ mr: 1}} />
+              <ListItemText primary="Manage Post" />
             </ListItem>
           </List>
         </Box>

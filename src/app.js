@@ -5,6 +5,7 @@ import AddEmployee from './component/add';
 import EmployeeLogin from './component/Login';
 import ManageAds from './component/manageadd';
 import ManageUsers from './component/manageuser';
+import ManagePosts from './component/managepost';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/login" element={<EmployeeLogin />} />
         <Route path='/manageuser' element={<ManageUsers />} />
         <Route path='/manageadd' element={<ManageAds/>} />
+        <Route path='/managepost' element={<ManagePosts/>} />     
       </Routes>
     </Router>
   );
