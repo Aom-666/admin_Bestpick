@@ -1,5 +1,18 @@
 import React, { useState } from 'react';
-import { AppBar, Toolbar, Typography, Button, Container, Box, Paper, Grid, Drawer, List, ListItem, ListItemText } from '@mui/material';
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  Container,
+  Box,
+  Paper,
+  Grid,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText
+} from '@mui/material';
 import { Bar } from 'react-chartjs-2';
 import { Link } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -26,6 +39,7 @@ const data = {
   ],
 };
 
+// ตั้งค่าข้อมูลกราฟสำหรับยอดผู้ใช้ทั้งหมด
 const totalUsersData = {
   labels: ['January', 'February', 'March', 'April', 'May', 'June'],
   datasets: [
@@ -48,6 +62,20 @@ const dailyPostsData = {
       data: [10, 20, 15, 25, 30, 35, 40],
       backgroundColor: '#4caf50',
       borderColor: '#388e3c',
+      borderWidth: 1,
+    },
+  ],
+};
+
+// ตั้งค่าข้อมูลกราฟสำหรับยอดโพสต์ทั้งหมด
+const TotalPostsData = {
+  labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+  datasets: [
+    {
+      label: 'Total Posts',
+      data: [100, 150, 200, 250, 300, 350],
+      backgroundColor: '#ff9800',
+      borderColor: '#f57c00',
       borderWidth: 1,
     },
   ],
@@ -103,12 +131,8 @@ const Dashboard = () => {
               <PeopleIcon sx={{ mr: 1 }} />
               <ListItemText primary="Manage Users" />
             </ListItem>
-            <ListItem button component={Link} to="/manageadd" sx={{ color: '#fff' }}>
-              <AddCircleIcon sx={{ mr: 1 }} />
-              <ListItemText primary="Manage Advertisement" />
-            </ListItem>
             <ListItem button component={Link} to="/managepost" sx={{ color: '#fff' }}>
-              <AssignmentIcon sx={{ mr: 1}} />
+              <AssignmentIcon sx={{ mr: 1 }} />
               <ListItemText primary="Manage Post" />
             </ListItem>
           </List>
@@ -151,16 +175,13 @@ const Dashboard = () => {
             </Paper>
           </Grid>
 
-
-          {/* ข้อความแสดงผลเพิ่มเติม */}
+          {/* กราฟยอดโพสต์ทั้งหมด */}
           <Grid item xs={12} md={6}>
             <Paper elevation={3} style={{ padding: '20px' }}>
               <Typography variant="h5" gutterBottom>
-                Admin Announcements
+                Total Posts Overview
               </Typography>
-              <Typography variant="body1">
-                Keep track of the latest admin updates, changes, and user feedback here.
-              </Typography>
+              <Bar data={TotalPostsData} />
             </Paper>
           </Grid>
         </Grid>

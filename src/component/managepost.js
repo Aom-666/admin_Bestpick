@@ -24,7 +24,11 @@ import {
   Drawer,
   List,
   ListItem,
-  ListItemText
+  ListItemText,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import EditIcon from '@mui/icons-material/Edit';
@@ -32,7 +36,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import PeopleIcon from '@mui/icons-material/People';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const theme = createTheme({
   palette: {
@@ -50,6 +54,8 @@ const ManagePosts = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Dummy data for demonstration
@@ -73,17 +79,25 @@ const ManagePosts = () => {
     ]);
   }, []);
 
+  const handleMenuClick = () => {
+    setIsDrawerOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setIsDrawerOpen(false);
+  };
+
+  const handleEdit = (post) => {
+    setSelectedPost(post);
+    setOpenDialog(true);
+  };
+
   const handleDelete = (postId) => {
     axios.delete(`/api/posts/${postId}`)
       .then(() => {
         setPosts(posts.filter(post => post.id !== postId));
       })
       .catch(error => console.error('Error deleting post:', error));
-  };
-
-  const handleEdit = (post) => {
-    setSelectedPost(post);
-    setOpenDialog(true);
   };
 
   const handleCloseDialog = () => {
@@ -98,14 +112,6 @@ const ManagePosts = () => {
         setOpenDialog(false);
       })
       .catch(error => console.error('Error updating post:', error));
-  };
-
-  const handleMenuClick = () => {
-    setIsDrawerOpen(true);
-  };
-
-  const handleDrawerClose = () => {
-    setIsDrawerOpen(false);
   };
 
   return (
@@ -134,16 +140,16 @@ const ManagePosts = () => {
           </Typography>
           <List>
             <ListItem button component={Link} to="/dashboard" sx={{ color: '#fff' }}>
-              <DashboardIcon sx={{ mr: 1 }} />
+              <DashboardIcon />
               <ListItemText primary="Dashboard" />
             </ListItem>
             <ListItem button component={Link} to="/manageuser" sx={{ color: '#fff' }}>
-              <PeopleIcon sx={{ mr: 1 }} />
+              <PeopleIcon />
               <ListItemText primary="Manage User" />
             </ListItem>
             <ListItem button component={Link} to="/manageadd" sx={{ color: '#fff' }}>
-              <AddCircleIcon sx={{ mr: 1 }} />
-              <ListItemText primary="Manage Advertisements" />
+              <AddCircleIcon />
+              <ListItemText primary="Manage Advertisement" />
             </ListItem>
           </List>
         </Box>
@@ -156,8 +162,6 @@ const ManagePosts = () => {
               <TableRow>
                 <TableCell>Image</TableCell>
                 <TableCell>Title</TableCell>
-                <TableCell>Start Date</TableCell>
-                <TableCell>End Date</TableCell>
                 <TableCell>Status</TableCell>
                 <TableCell>Actions</TableCell>
               </TableRow>
@@ -169,8 +173,6 @@ const ManagePosts = () => {
                     <img src={post.imageUrl} alt={post.title} style={{ width: '100px', borderRadius: '5px' }} />
                   </TableCell>
                   <TableCell>{post.title}</TableCell>
-                  <TableCell>{post.startDate}</TableCell>
-                  <TableCell>{post.endDate}</TableCell>
                   <TableCell>{post.status}</TableCell>
                   <TableCell>
                     <IconButton onClick={() => handleEdit(post)} color="primary">
@@ -199,24 +201,17 @@ const ManagePosts = () => {
               value={selectedPost?.title || ''}
               onChange={(e) => setSelectedPost({ ...selectedPost, title: e.target.value })}
             />
-            <TextField
-              margin="dense"
-              label="Start Date"
-              type="date"
-              fullWidth
-              variant="outlined"
-              value={selectedPost?.startDate || ''}
-              onChange={(e) => setSelectedPost({ ...selectedPost, startDate: e.target.value })}
-            />
-            <TextField
-              margin="dense"
-              label="End Date"
-              type="date"
-              fullWidth
-              variant="outlined"
-              value={selectedPost?.endDate || ''}
-              onChange={(e) => setSelectedPost({ ...selectedPost, endDate: e.target.value })}
-            />
+            <FormControl fullWidth margin="dense">
+              <InputLabel id="status-label">Status</InputLabel>
+              <Select
+                labelId="status-label"
+                value={selectedPost?.status || ''}
+                onChange={(e) => setSelectedPost({ ...selectedPost, status: e.target.value })}
+              >
+                <MenuItem value="Active">Active</MenuItem>
+                <MenuItem value="Inactive">Inactive</MenuItem>
+              </Select>
+            </FormControl>
           </DialogContent>
           <DialogActions>
             <Button onClick={handleCloseDialog}>Cancel</Button>
