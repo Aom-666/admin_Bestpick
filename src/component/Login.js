@@ -2,41 +2,41 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, TextField, Container, Typography, Paper, Box } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import axios from 'axios'; // นำเข้า axios
+import axios from 'axios'; // Import axios for making HTTP requests
 
-// สร้างธีมที่กำหนดเอง
+// Create a custom theme
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#6200ea', // สีหลัก
+      main: '#6200ea', // Primary color
     },
     secondary: {
-      main: '#03dac6', // สีรอง
+      main: '#03dac6', // Secondary color
     },
   },
 });
 
 const Login = () => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState(''); // Use email instead of username
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
   const handleLogin = async () => {
     try {
-      // ส่งคำขอไปยัง API เพื่อทำการล็อกอิน
-      const response = await axios.post('http://localhost:4000/api/login', {
-        username,
+      // Send request to API for login
+      const response = await axios.post('http://localhost:3000/admin/login', {
+        email, // Update field to match backend
         password,
       });
 
-      // หากล็อกอินสำเร็จ จะได้รับ token
+      // If login successful, store token
       const { token } = response.data;
-      localStorage.setItem('token', token); // เก็บ token ใน localStorage
+      localStorage.setItem('token', token); 
 
-      // นำทางไปยังหน้า Dashboard
+      // Navigate to Dashboard
       navigate('/dashboard');
     } catch (error) {
-      alert('เข้าสู่ระบบล้มเหลว'); // แจ้งเตือนเมื่อข้อมูลไม่ถูกต้อง
+      alert('Login failed'); // Alert on failure
     }
   };
 
@@ -49,12 +49,12 @@ const Login = () => {
           </Typography>
           <Box mb={2}>
             <TextField
-              label="Username"
+              label="Email"
               variant="outlined"
               margin="normal"
               fullWidth
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               style={{ borderRadius: '10px', backgroundColor: '#f5f5f5' }}
             />
           </Box>
