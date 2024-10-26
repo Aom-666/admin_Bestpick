@@ -14,28 +14,40 @@ import {
   ListItemText
 } from '@mui/material';
 import { Bar } from 'react-chartjs-2';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom'; // เพิ่ม useNavigate ที่นี่
 import MenuIcon from '@mui/icons-material/Menu';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import PeopleIcon from '@mui/icons-material/People';
+import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import axios from 'axios';
+import { useAuth } from '../AuthContext';
+import moment from 'moment';
 
 // Register the chart components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const Dashboard = () => {
+  const { handleLogout, isAdmin } = useAuth(); // เรียกใช้ handleLogout และ isAdmin จาก useAuth
+
+  // ตรวจสอบว่าเป็นแอดมิน
+  if (!isAdmin()) {
+    return <div>Access Denied. You are not authorized to view this page.</div>; // แสดงข้อความถ้าไม่ใช่แอดมิน
+  }
+
   const [isDrawerOpen, setDrawerOpen] = useState(false); // Sidebar state
   const [newUsersData, setNewUsersData] = useState([]);
   const [totalPostsData, setTotalPostsData] = useState([]);
+  
 
   // Fetch dashboard data when component mounts
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get('http://localhost:3000/admin/dashboard', {
-          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }, // Token sent in the headers
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         });
         setNewUsersData(response.data.new_users_per_day);
         setTotalPostsData(response.data.total_posts_per_day);
@@ -54,32 +66,33 @@ const Dashboard = () => {
     setDrawerOpen(false);
   };
 
-  // Prepare data for charts (mapping API data into chart.js format)
-  const newUserChartData = {
-    labels: newUsersData.map(data => data.date), // Map dates for x-axis
-    datasets: [
-      {
-        label: 'New Users',
-        data: newUsersData.map(data => data.new_users),
-        backgroundColor: '#3f51b5',
-        borderColor: '#303f9f',
-        borderWidth: 1,
-      },
-    ],
-  };
+// ในที่ที่คุณกำหนด newUserChartData
+const newUserChartData = {
+  labels: newUsersData.map(data => moment(data.date).format('DD/MM/YYYY')), // ใช้ DD/MM/YYYY เพื่อให้วันมาก่อนเดือน
+  datasets: [
+    {
+      label: 'New Users',
+      data: newUsersData.map(data => data.new_users),
+      backgroundColor: '#3f51b5',
+      borderColor: '#303f9f',
+      borderWidth: 1,
+    },
+  ],
+};
 
-  const totalPostChartData = {
-    labels: totalPostsData.map(data => data.date), // Map dates for x-axis
-    datasets: [
-      {
-        label: 'Total Posts',
-        data: totalPostsData.map(data => data.total_posts),
-        backgroundColor: '#ff9800',
-        borderColor: '#f57c00',
-        borderWidth: 1,
-      },
-    ],
-  };
+const totalPostChartData = {
+  labels: totalPostsData.map(data => moment(data.date).format('DD/MM/YYYY')), // ใช้ DD/MM/YYYY เพื่อให้วันมาก่อนเดือน
+  datasets: [
+    {
+      label: 'Total Posts',
+      data: totalPostsData.map(data => data.total_posts),
+      backgroundColor: '#ff9800',
+      borderColor: '#f57c00',
+      borderWidth: 1,
+    },
+  ],
+};
+
 
   return (
     <Box sx={{ width: '100%', minHeight: '100vh', backgroundColor: '#f5f5f5' }}>
@@ -90,7 +103,7 @@ const Dashboard = () => {
             <Typography variant="h6" sx={{ color: '#ffffff' }}>Admin Dashboard</Typography>
           </Box>
           <Box>
-            <Button color="inherit" component={Link} to="/login">LOGOUT</Button>
+          <Button color="inherit" onClick={handleLogout}>Logout</Button> {/* ปุ่มล็อกเอาท์ */}
           </Box>
         </Toolbar>
       </AppBar>
@@ -111,6 +124,14 @@ const Dashboard = () => {
             <ListItem button component={Link} to="/managepost" sx={{ color: '#fff' }}>
               <AssignmentIcon sx={{ mr: 1 }} />
               <ListItemText primary="Manage Post" />
+            </ListItem>
+            <ListItem button component={Link} to="/manageadd" sx={{ color: '#fff' }}>
+              <AddCircleIcon sx={{ mr: 1 }} />
+              <ListItemText primary="Manage Advertisement" />
+            </ListItem>
+            <ListItem button component={Link} to="/manage-reported-posts" sx={{ color: '#fff' }}>
+              <ReportProblemIcon sx={{ mr: 1 }} />
+              <ListItemText primary="Report posts" />
             </ListItem>
           </List>
         </Box>

@@ -1,97 +1,178 @@
 import React, { useState } from 'react';
-import { TextField, Button, Typography, Paper, Box, FormControl, InputLabel, Select, MenuItem, FormHelperText, FormControlLabel, Checkbox } from '@mui/material';
+import { useNavigate, Link } from 'react-router-dom';
+import {
+  AppBar, Toolbar, Typography, Button, Box, TextField,
+  ThemeProvider, createTheme, FormControl, InputLabel,
+  Select, MenuItem
+} from '@mui/material';
+import axios from 'axios';
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#556cd6',
+    },
+    secondary: {
+      main: '#19857b',
+    },
+  },
+});
 
 const AddAd = () => {
   const [adData, setAdData] = useState({
     title: '',
-    description: '',
-    targetURL: '',
+    content: '',
+    link: '',
     image: null,
-    targetAudience: ''
+    created_at: '',
+    updated_at: '',
+    expiration_date: '',
+    status: 'active',
   });
+  
+  const navigate = useNavigate();
 
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setAdData({ ...adData, [name]: value });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setAdData({
+      ...adData,
+      [name]: value,
+    });
   };
 
-  const handleImageChange = (event) => {
-    setAdData({ ...adData, image: event.target.files[0] });
+  const handleFileChange = (e) => {
+    setAdData({
+      ...adData,
+      image: e.target.files[0],
+    });
   };
 
-  const handleSubmit = () => {
-    // Logic to submit ad data to server
-    console.log(adData);
-    alert('Ad Submitted Successfully!');
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    Object.keys(adData).forEach(key => {
+      formData.append(key, adData[key]);
+    });
+
+    const token = localStorage.getItem('token'); // รับ token
+
+    try {
+      const response = await axios.post('http://localhost:3000/ads', formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      console.log('Ad created successfully:', response.data);
+      navigate('/manageadd'); // กลับไปที่หน้าจัดการโฆษณา
+    } catch (error) {
+      console.error('Error creating ad:', error.response?.data || error.message);
+    }
   };
 
   return (
-    <Box component={Paper} p={3}>
-      <Typography variant="h5">Add New Advertisement</Typography>
-      <TextField
-        fullWidth
-        label="Title"
-        name="title"
-        value={adData.title}
-        onChange={handleInputChange}
-        margin="normal"
-      />
-      <TextField
-        fullWidth
-        label="Description"
-        name="description"
-        multiline
-        rows={4}
-        value={adData.description}
-        onChange={handleInputChange}
-        margin="normal"
-      />
-      <TextField
-        fullWidth
-        label="Target URL"
-        name="targetURL"
-        value={adData.targetURL}
-        onChange={handleInputChange}
-        margin="normal"
-      />
-      <FormControl fullWidth margin="normal">
-        <InputLabel>Target Audience</InputLabel>
-        <Select
-          value={adData.targetAudience}
-          label="Target Audience"
-          onChange={handleInputChange}
-          name="targetAudience"
-        >
-          <MenuItem value="all">All</MenuItem>
-          <MenuItem value="18-24">18-24</MenuItem>
-          <MenuItem value="25-35">25-35</MenuItem>
-          <MenuItem value="35+">35+</MenuItem>
-        </Select>
-      </FormControl>
-      <Button
-        variant="contained"
-        component="label"
-        fullWidth
-        margin="normal"
-      >
-        Upload Image
-        <input
-          type="file"
-          hidden
-          onChange={handleImageChange}
-        />
-      </Button>
-      <Box mt={2}>
-        <Button
-          variant="contained"
-          color="primary"
-          fullWidth
-          onClick={handleSubmit}
-        >
-          Submit Advertisement
-        </Button>
+    <ThemeProvider theme={theme}>
+      <AppBar position="fixed" sx={{ backgroundColor: '#1976d2' }}>
+        <Toolbar>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            Add New Ad
+          </Typography>
+          <Button color="inherit" component={Link} to="/manageadd">Back</Button>
+        </Toolbar>
+      </AppBar>
+
+      <Box sx={{ pt: 10, pl: 3, pr: 3 }}>
+        <form onSubmit={handleSubmit}>
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Title"
+            name="title"
+            value={adData.title}
+            onChange={handleChange}
+            required
+            InputLabelProps={{ shrink: true }}
+          />
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Content"
+            name="content"
+            value={adData.content}
+            onChange={handleChange}
+            required
+            InputLabelProps={{ shrink: true }}
+          />
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Link"
+            name="link"
+            value={adData.link}
+            onChange={handleChange}
+            required
+            InputLabelProps={{ shrink: true }}
+          />
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Image"
+            type="file"
+            onChange={handleFileChange}
+            required
+            InputLabelProps={{ shrink: true }}
+          />
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Created At"
+            type="datetime-local"
+            name="created_at"
+            value={adData.created_at}
+            onChange={handleChange}
+            required
+            InputLabelProps={{ shrink: true }}
+          />
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Updated At"
+            type="datetime-local"
+            name="updated_at"
+            value={adData.updated_at}
+            onChange={handleChange}
+            required
+            InputLabelProps={{ shrink: true }}
+          />
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Expiration Date"
+            type="date"
+            name="expiration_date"
+            value={adData.expiration_date}
+            onChange={handleChange}
+            required
+            InputLabelProps={{ shrink: true }}
+          />
+          <FormControl fullWidth margin="normal">
+            <InputLabel id="status-label">Status</InputLabel>
+            <Select
+              labelId="status-label"
+              name="status"
+              value={adData.status}
+              onChange={handleChange}
+            >
+              <MenuItem value="active">Active</MenuItem>
+              <MenuItem value="inactive">Inactive</MenuItem>
+            </Select>
+          </FormControl>
+          <Button type="submit" variant="contained" color="primary">
+            Add Ad
+          </Button>
+        </form>
       </Box>
-    </Box>
+    </ThemeProvider>
   );
 };
 

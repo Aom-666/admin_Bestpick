@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   AppBar, Toolbar, Typography, Button, Box, Paper,
   Table, TableBody, TableCell, TableContainer, TableHead,
@@ -8,13 +8,15 @@ import {
   Drawer, List, ListItem, ListItemText, FormControl,
   InputLabel, Select, MenuItem
 } from '@mui/material';
-import axios from 'axios'; // Ensure axios is imported
+import axios from 'axios';
 import MenuIcon from '@mui/icons-material/Menu';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import PeopleIcon from '@mui/icons-material/People';
+import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import { useAuth } from '../AuthContext'; // นำเข้า useAuth
 
 const theme = createTheme({
   palette: {
@@ -34,16 +36,18 @@ const theme = createTheme({
 });
 
 const ManageAds = () => {
+  const { handleLogout, isAdmin } = useAuth(); // เรียกใช้ handleLogout และ isAdmin จาก useAuth
+
+  // ตรวจสอบว่าเป็นแอดมิน
+  if (!isAdmin()) {
+    return <div>Access Denied. You are not authorized to view this page.</div>; // แสดงข้อความถ้าไม่ใช่แอดมิน
+  }
+
   const [ads, setAds] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [currentAd, setCurrentAd] = useState(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-
-  const navigate = useNavigate();
-
-  const handleNavigateToAddAd = () => {
-    navigate('/add');
-  };
+  const [imageFile, setImageFile] = useState(null);
 
   const handleMenuClick = () => {
     setIsDrawerOpen(true);
@@ -56,42 +60,103 @@ const ManageAds = () => {
   const handleEdit = (ad) => {
     setCurrentAd(ad);
     setOpenDialog(true);
+    setImageFile(null);
   };
 
-  const handleDelete = (adId) => {
-    axios.delete(`/api/posts/${adId}`)
-      .then(() => {
-        setAds(ads.filter(ad => ad.id !== adId));
-      })
-      .catch(error => console.error('Error deleting ad:', error));
+  const handleDelete = async (adId) => {
+    const token = localStorage.getItem('token');
+    try {
+      await axios.delete(`http://localhost:3000/ads/${adId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setAds(ads.filter(ad => ad.id !== adId));
+    } catch (error) {
+      console.error('Error deleting ad:', error);
+    }
+  };
+
+  const fetchAds = async () => {
+    const token = localStorage.getItem('token');
+    try {
+      const response = await axios.get('http://localhost:3000/ads', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setAds(response.data);
+    } catch (error) {
+      console.error('Error fetching ads:', error);
+    }
   };
 
   useEffect(() => {
-    // Load ads data from the API
-    // Here you can replace the sample data with the API call
-    const sampleAds = [
-      { id: 1, name: 'Ad 1', startDate: '2021-01-01', endDate: '2021-02-01', status: 'Active', imageUrl: 'https://via.placeholder.com/100' },
-      { id: 2, name: 'Ad 2', startDate: '2021-03-01', endDate: '2021-04-01', status: 'Inactive', imageUrl: 'https://via.placeholder.com/100' },
-      { id: 3, name: 'Ad 3', startDate: '2021-05-01', endDate: '2021-06-01', status: 'Active', imageUrl: 'https://via.placeholder.com/100' }
-    ];
-    
-    setAds(sampleAds); // Set sample ads instead of fetching from the API
+    fetchAds();
   }, []);
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
     setCurrentAd(null);
+    setImageFile(null);
   };
 
-  const handleSave = () => {
-    // Save logic for editing the post
-    axios.put(`/api/posts/${currentAd.id}`, currentAd)
-      .then(() => {
-        setAds(ads.map(ad => (ad.id === currentAd.id ? currentAd : ad)));
+  const handleSave = async () => {
+    const token = localStorage.getItem('token'); // รับ token
+    const formData = new FormData();
+    formData.append('title', currentAd.title);
+    formData.append('content', currentAd.content);
+    formData.append('link', currentAd.link);
+    formData.append('status', currentAd.status); // เพิ่มสถานะที่แก้ไข
+
+    // แปลงค่าของ created_at, updated_at และ expiration_date ให้อยู่ในรูปแบบที่ MySQL คาดหวัง
+    if (currentAd.created_at) {
+        formData.append('created_at', new Date(currentAd.created_at).toISOString().slice(0, 19).replace('T', ' '));
+    }
+    if (currentAd.updated_at) {
+        formData.append('updated_at', new Date(currentAd.updated_at).toISOString().slice(0, 19).replace('T', ' '));
+    }
+    if (currentAd.expiration_date) {
+        formData.append('expiration_date', new Date(currentAd.expiration_date).toISOString().slice(0, 19).replace('T', ' '));
+    }
+
+    if (imageFile) {
+        formData.append('image', imageFile);
+    }
+
+    console.log('FormData to be sent:', formData); // ตรวจสอบข้อมูลที่ส่งไปยังเซิร์ฟเวอร์
+
+    try {
+        if (currentAd.id) {
+            // Update Ad
+            const response = await axios.put(`http://localhost:3000/ads/${currentAd.id}`, formData, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            console.log('Ad updated successfully:', response.data); // Log การตอบสนองจากเซิร์ฟเวอร์
+            setAds(ads.map(ad => (ad.id === currentAd.id ? { ...ad, status: currentAd.status } : ad)));
+        } else {
+            // Create new Ad
+            const response = await axios.post('http://localhost:3000/ads', formData, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            console.log('Ad created successfully:', response.data); // Log การตอบสนองจากเซิร์ฟเวอร์
+            setAds([...ads, response.data]);
+        }
         setOpenDialog(false);
-      })
-      .catch(error => console.error('Error updating ad:', error));
-  };
+    } catch (error) {
+        if (error.response) {
+            console.error('Error saving ad:', error.response.data); // Log ข้อความผิดพลาดจากเซิร์ฟเวอร์
+        } else {
+            console.error('Error saving ad:', error.message);
+        }
+    }
+};
 
   return (
     <ThemeProvider theme={theme}>
@@ -103,7 +168,7 @@ const ManageAds = () => {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Manage Ads
           </Typography>
-          <Button color="inherit" component={Link} to="/login">Logout</Button>
+          <Button color="inherit" onClick={handleLogout}>Logout</Button> {/* ปุ่มล็อกเอาท์ */}
         </Toolbar>
       </AppBar>
 
@@ -119,60 +184,81 @@ const ManageAds = () => {
           </Typography>
           <List>
             <ListItem button component={Link} to="/dashboard" sx={{ color: '#fff' }}>
-              <DashboardIcon />
+              <DashboardIcon sx={{ mr: 1 }} />
               <ListItemText primary="Dashboard" />
             </ListItem>
             <ListItem button component={Link} to="/manageuser" sx={{ color: '#fff' }}>
-              <PeopleIcon />
+              <PeopleIcon sx={{ mr: 1 }} />
               <ListItemText primary="Manage User" />
             </ListItem>
             <ListItem button component={Link} to="/managepost" sx={{ color: '#fff' }}>
-              <AssignmentIcon />
+              <AssignmentIcon sx={{ mr: 1 }} />
               <ListItemText primary="Manage Post" />
+            </ListItem>
+            <ListItem button component={Link} to="/manage-reported-posts" sx={{ color: '#fff' }}>
+              <ReportProblemIcon sx={{ mr: 1 }} />
+              <ListItemText primary="Report posts" />
             </ListItem>
           </List>
         </Box>
       </Drawer>
 
       <Box sx={{ pt: 10, pl: 3, pr: 3 }}>
+        <Button variant="contained" color="primary" component={Link} to="/add" sx={{ mb: 2 }}>
+          Add New Ad
+        </Button> {/* ปุ่มเพื่อไปยังหน้าเพิ่มโฆษณา */}
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
               <TableRow>
                 <TableCell>Image</TableCell>
                 <TableCell>Title</TableCell>
-                <TableCell>Start Date</TableCell>
-                <TableCell>End Date</TableCell>
-                <TableCell>Status</TableCell>
+                <TableCell>Content</TableCell>
+                <TableCell>Link</TableCell>
+                <TableCell>Created At</TableCell>
+                <TableCell>Updated At</TableCell>
+                <TableCell>Expiration Date</TableCell>
+                <TableCell>Status</TableCell> {/* เพิ่มคอลัมน์สถานะ */}
                 <TableCell>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {ads.map((ad) => (
-                <TableRow key={ad.id}>
-                  <TableCell>
-                    <img src={ad.imageUrl} alt={ad.title} style={{ width: '100px', height: 'auto', borderRadius: '5px' }} />
-                  </TableCell>
-                  <TableCell>{ad.name}</TableCell>
-                  <TableCell>{ad.startDate}</TableCell>
-                  <TableCell>{ad.endDate}</TableCell>
-                  <TableCell>{ad.status}</TableCell>
-                  <TableCell>
-                    <IconButton onClick={() => handleEdit(ad)} color="primary">
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton onClick={() => handleDelete(ad.id)} color="error">
-                      <DeleteIcon />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
+            {ads.map((ad) => (
+              <TableRow key={ad.id}>
+                <TableCell>
+                  <img
+                    src={`http://localhost:3000${ad.image}`}
+                    alt={ad.title}
+                    style={{ width: '100px', height: 'auto', borderRadius: '5px' }}
+                  />
+                </TableCell>
+                <TableCell>{ad.title}</TableCell>
+                <TableCell>{ad.content}</TableCell>
+                <TableCell>
+                  <a href={ad.link} target="_blank" rel="noopener noreferrer">{ad.link}</a>
+                </TableCell>
+                <TableCell>{new Date(ad.created_at).toLocaleString('en-GB')}</TableCell>
+                <TableCell>{new Date(ad.updated_at).toLocaleString('en-GB')}</TableCell>
+                <TableCell>
+                  {ad.expiration_date ? new Date(ad.expiration_date).toLocaleString('en-GB') : 'N/A'}
+                </TableCell>
+                <TableCell>{ad.status.toLowerCase()}</TableCell>
+                <TableCell>
+                  <IconButton onClick={() => handleEdit(ad)} color="primary">
+                    <EditIcon />
+                  </IconButton>
+                  <IconButton onClick={() => handleDelete(ad.id)} color="error">
+                    <DeleteIcon />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
           </Table>
         </TableContainer>
 
         <Dialog open={openDialog} onClose={handleCloseDialog}>
-          <DialogTitle>Edit Ad</DialogTitle>
+          <DialogTitle>{currentAd ? 'Edit Ad' : 'Add Ad'}</DialogTitle>
           <DialogContent>
             <TextField
               autoFocus
@@ -186,21 +272,56 @@ const ManageAds = () => {
             />
             <TextField
               margin="dense"
-              label="Start Date"
-              type="date"
+              label="Content"
+              type="text"
               fullWidth
               variant="outlined"
-              value={currentAd?.startDate || ''}
-              onChange={(e) => setCurrentAd({ ...currentAd, startDate: e.target.value })}
+              value={currentAd?.content || ''}
+              onChange={(e) => setCurrentAd({ ...currentAd, content: e.target.value })}
             />
             <TextField
               margin="dense"
-              label="End Date"
+              label="Link"
+              type="text"
+              fullWidth
+              variant="outlined"
+              value={currentAd?.link || ''}
+              onChange={(e) => setCurrentAd({ ...currentAd, link: e.target.value })}
+            />
+            <TextField
+              margin="dense"
+              label="Image"
+              type="file"
+              fullWidth
+              variant="outlined"
+              onChange={(e) => setImageFile(e.target.files[0])}
+            />
+            <TextField
+              margin="dense"
+              label="Created At"
+              type="datetime-local"
+              fullWidth
+              variant="outlined"
+              value={currentAd?.created_at ? new Date(currentAd.created_at).toISOString().slice(0, 16) : ''}
+              onChange={(e) => setCurrentAd({ ...currentAd, created_at: new Date(e.target.value).toISOString() })}
+            />
+            <TextField
+              margin="dense"
+              label="Updated At"
+              type="datetime-local"
+              fullWidth
+              variant="outlined"
+              value={currentAd?.updated_at ? new Date(currentAd.updated_at).toISOString().slice(0, 16) : ''}
+              onChange={(e) => setCurrentAd({ ...currentAd, updated_at: new Date(e.target.value).toISOString() })}
+            />
+            <TextField
+              margin="dense"
+              label="Expiration Date"
               type="date"
               fullWidth
               variant="outlined"
-              value={currentAd?.endDate || ''}
-              onChange={(e) => setCurrentAd({ ...currentAd, endDate: e.target.value })}
+              value={currentAd?.expiration_date ? new Date(currentAd.expiration_date).toISOString().slice(0, 10) : ''}
+              onChange={(e) => setCurrentAd({ ...currentAd, expiration_date: new Date(e.target.value).toISOString() })}
             />
             <FormControl fullWidth margin="dense">
               <InputLabel id="status-label">Status</InputLabel>
@@ -208,11 +329,9 @@ const ManageAds = () => {
                 labelId="status-label"
                 value={currentAd?.status || ''}
                 onChange={(e) => setCurrentAd({ ...currentAd, status: e.target.value })}
-                fullWidth
-                variant="outlined"
               >
-                <MenuItem value="Active">Active</MenuItem>
-                <MenuItem value="Inactive">Inactive</MenuItem>
+                <MenuItem value="active">Active</MenuItem>
+                <MenuItem value="inactive">Inactive</MenuItem>
               </Select>
             </FormControl>
           </DialogContent>
@@ -226,4 +345,4 @@ const ManageAds = () => {
   );
 };
 
-export default ManageAds;
+export default ManageAds; 

@@ -1,16 +1,23 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import {
+  AppBar, Toolbar, Typography, Button, Box, Paper,
+  Table, TableBody, TableCell, TableContainer, TableHead,
+  TableRow, IconButton, Dialog, DialogActions, DialogContent,
+  DialogTitle, ThemeProvider, createTheme,
+  Drawer, List, ListItem, ListItemText, FormControl,
+  InputLabel, Select, MenuItem
+} from '@mui/material';
 import axios from 'axios';
-import { AppBar, Toolbar, Typography, IconButton, Button, Drawer, Box, List, ListItem, ListItemText, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Dialog, TextField, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import AssignmentIcon from '@mui/icons-material/Assignment';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Link } from 'react-router-dom';
+import PeopleIcon from '@mui/icons-material/People';
+import ReportProblemIcon from '@mui/icons-material/ReportProblem';
+import { useAuth } from '../AuthContext';
 
-// กำหนดธีมสีและแบบอักษร
 const theme = createTheme({
   palette: {
     primary: {
@@ -29,16 +36,29 @@ const theme = createTheme({
 });
 
 const ManageUsers = () => {
+  const { handleLogout, isAdmin } = useAuth(); // เรียกใช้ handleLogout และ isAdmin จาก useAuth
+
+  // ตรวจสอบว่าเป็นแอดมิน
+  if (!isAdmin()) {
+    return <div>Access Denied. You are not authorized to view this page.</div>; // แสดงข้อความถ้าไม่ใช่แอดมิน
+  }
   const [users, setUsers] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [isDrawerOpen, setDrawerOpen] = useState(false);
 
   useEffect(() => {
-    axios.get('/api/users')
-      .then(response => setUsers(response.data))
-      .catch(error => console.error('Error loading users:', error));
+    fetchUsers();
   }, []);
+
+  const fetchUsers = async () => {
+    try {
+      const response = await axios.get('http://localhost:3000/admin/users');
+      setUsers(response.data);
+    } catch (error) {
+      console.error('Error loading users:', error);
+    }
+  };
 
   const handleOpenEdit = (user) => {
     setSelectedUser(user);
@@ -47,14 +67,21 @@ const ManageUsers = () => {
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
+    setSelectedUser(null);
   };
 
-  const handleDeleteUser = (userId) => {
-    axios.delete(`/api/users/${userId}`)
-      .then(() => {
-        setUsers(users.filter(user => user.id !== userId));
-      })
-      .catch(error => console.error('Error deleting user:', error));
+  const handleDeleteUser = async (userId) => {
+    const token = localStorage.getItem('token'); // รับ token
+    try {
+      await axios.delete(`http://localhost:3000/admin/users/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`, // ส่ง token ใน headers
+        },
+      });
+      setUsers(users.filter(user => user.id !== userId));
+    } catch (error) {
+      console.error('Error deleting user:', error);
+    }
   };
 
   const handleMenuClick = () => {
@@ -65,37 +92,67 @@ const ManageUsers = () => {
     setDrawerOpen(false);
   };
 
+  const handleSaveUser = async () => {
+    const token = localStorage.getItem('token'); // รับ token
+    try {
+      if (selectedUser.id) {
+        // Update user status
+        await axios.put(`http://localhost:3000/admin/users/${selectedUser.id}/status`, {
+          status: selectedUser.status,
+        }, {
+          headers: {
+            Authorization: `Bearer ${token}`, // ส่ง token ใน headers
+          },
+        });
+        // Update users state
+        setUsers(users.map(user => (user.id === selectedUser.id ? { ...user, status: selectedUser.status } : user)));
+      }
+      setOpenDialog(false);
+    } catch (error) {
+      console.error('Error updating user status:', error);
+    }
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <AppBar position="fixed" sx={{ backgroundColor: '#1976d2' }}>
-        <Toolbar sx={{ justifyContent: 'space-between' }}>
-          <IconButton edge="start" color="inherit" onClick={handleMenuClick} sx={{ mr: 2 }}>
+        <Toolbar>
+          <IconButton edge="start" color="inherit" onClick={handleMenuClick}>
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Manage Users
           </Typography>
-          <Button color="inherit" component={Link} to="/login">Logout</Button>
+          <Button color="inherit" onClick={handleLogout}>Logout</Button>
         </Toolbar>
       </AppBar>
 
       <Drawer anchor="left" open={isDrawerOpen} onClose={handleDrawerClose}>
-        <Box sx={{ width: 250, backgroundColor: '#1976d2', color: '#fff', height: '100%' }}>
+        <Box
+          sx={{ width: 250, backgroundColor: '#1976d2', color: '#fff', height: '100%' }}
+          role="presentation"
+          onClick={handleDrawerClose}
+          onKeyDown={handleDrawerClose}
+        >
           <Typography variant="h6" sx={{ padding: '16px', textAlign: 'center', fontWeight: 'bold' }}>
             Menu
           </Typography>
           <List>
-            <ListItem button component={Link} to={"/dashboard"} sx={{ color: '#fff' }}>
-              <DashboardIcon />
+            <ListItem button component={Link} to="/dashboard" sx={{ color: '#fff' }}>
+              <DashboardIcon sx={{ mr: 1 }} />
               <ListItemText primary="Dashboard" />
             </ListItem>
-            <ListItem button component={Link} to={"/manageadd"} sx={{ color: '#fff' }}>
-              <AddCircleIcon />
+            <ListItem button component={Link} to="/manageadd" sx={{ color: '#fff' }}>
+              <AddCircleIcon sx={{ mr: 1 }} />
               <ListItemText primary="Manage Advertisements" />
             </ListItem>
             <ListItem button component={Link} to="/managepost" sx={{ color: '#fff' }}>
-              <AssignmentIcon sx={{ mr: 1}} />
+              <PeopleIcon sx={{ mr: 1 }} />
               <ListItemText primary="Manage Post" />
+            </ListItem>
+            <ListItem button component={Link} to="/manage-reported-posts" sx={{ color: '#fff' }}>
+              <ReportProblemIcon sx={{ mr: 1 }} />
+              <ListItemText primary="Report posts" />
             </ListItem>
           </List>
         </Box>
@@ -106,18 +163,28 @@ const ManageUsers = () => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Name</TableCell>
+                <TableCell>ID</TableCell>
                 <TableCell>Email</TableCell>
+                <TableCell>Username</TableCell>
+                <TableCell>Birthday</TableCell>
+                <TableCell>Gender</TableCell>
+                <TableCell>Age</TableCell>
                 <TableCell>Role</TableCell>
+                <TableCell>Status</TableCell>
                 <TableCell>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {users.map(user => (
                 <TableRow key={user.id}>
-                  <TableCell>{user.name}</TableCell>
+                  <TableCell>{user.id}</TableCell>
                   <TableCell>{user.email}</TableCell>
+                  <TableCell>{user.username}</TableCell>
+                  <TableCell>{new Date(user.birthday).toLocaleDateString('en-US')}</TableCell>
+                  <TableCell>{user.gender}</TableCell>
+                  <TableCell>{user.age}</TableCell>
                   <TableCell>{user.role}</TableCell>
+                  <TableCell>{user.status}</TableCell>
                   <TableCell>
                     <IconButton onClick={() => handleOpenEdit(user)}>
                       <EditIcon color="primary" />
@@ -135,33 +202,22 @@ const ManageUsers = () => {
         <Dialog open={openDialog} onClose={handleCloseDialog}>
           <DialogTitle>Edit User</DialogTitle>
           <DialogContent>
-            <TextField
-              autoFocus
-              margin="dense"
-              label="Name"
-              type="text"
-              fullWidth
-              variant="outlined"
-              value={selectedUser?.name}
-              onChange={(e) => setSelectedUser({ ...selectedUser, name: e.target.value })}
-            />
-            <TextField
-              margin="dense"
-              label="Email"
-              type="email"
-              fullWidth
-              variant="outlined"
-              value={selectedUser?.email}
-              onChange={(e) => setSelectedUser({ ...selectedUser, email: e.target.value })}
-            />
+            <FormControl fullWidth margin="dense">
+              <InputLabel id="status-label">Status</InputLabel>
+              <Select
+                labelId="status-label"
+                value={selectedUser?.status || ''}
+                onChange={(e) => setSelectedUser({ ...selectedUser, status: e.target.value })}
+                fullWidth
+              >
+                <MenuItem value="active">Active</MenuItem>
+                <MenuItem value="deactive">Deactive</MenuItem>
+              </Select>
+            </FormControl>
           </DialogContent>
           <DialogActions>
             <Button onClick={handleCloseDialog}>Cancel</Button>
-            <Button onClick={() => {
-              // Save logic here
-              handleCloseDialog();
-              // Update state or re-fetch users
-            }}>Save</Button>
+            <Button onClick={handleSaveUser}>Save</Button>
           </DialogActions>
         </Dialog>
       </Box>
