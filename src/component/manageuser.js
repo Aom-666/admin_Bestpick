@@ -52,13 +52,20 @@ const ManageUsers = () => {
   }, []);
 
   const fetchUsers = async () => {
+    const token = localStorage.getItem('token');
     try {
-      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/admin/users`);
+      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/admin/users`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data', // Only needed if sending form data
+        },
+      });
       setUsers(response.data);
     } catch (error) {
       console.error('Error loading users:', error);
     }
   };
+  
 
   const handleOpenEdit = (user) => {
     setSelectedUser(user);
