@@ -57,7 +57,7 @@ const AddAd = () => {
     const token = localStorage.getItem('token'); // รับ token
 
     try {
-      const response = await axios.post('${process.env.REACT_APP_BASE_URL}/ads', formData, {
+      const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/ads`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data',
