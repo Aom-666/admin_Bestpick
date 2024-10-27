@@ -68,7 +68,7 @@ const ManageReportedPosts = () => {
   const fetchReportedPosts = async () => {
     const token = localStorage.getItem('token');
     try {
-      const response = await axios.get('http://localhost:3000/admin/reported-posts', {
+      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/admin/reported-posts`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -100,7 +100,7 @@ const ManageReportedPosts = () => {
   const handleSave = async () => {
     const token = localStorage.getItem('token');
     try {
-      const response = await axios.put(`http://localhost:3000/admin/reports/${selectedPost.report_id}`, {
+      const response = await axios.put(`${process.env.REACT_APP_BASE_URL}/admin/reports/${selectedPost.report_id}`, {
         status: selectedPost.status
       }, {
         headers: {

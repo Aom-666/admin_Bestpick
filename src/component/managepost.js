@@ -72,7 +72,7 @@ const ManagePosts = () => {
   const fetchPosts = async () => {
     const token = localStorage.getItem('token');
     try {
-      const response = await axios.get('http://localhost:3000/admin/posts', {
+      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/admin/posts`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -102,7 +102,7 @@ const ManagePosts = () => {
   const handleDelete = async (postId) => {
     const token = localStorage.getItem('token');
     try {
-      await axios.delete(`http://localhost:3000/admin/posts/${postId}`, {
+      await axios.delete(`${process.env.REACT_APP_BASE_URL}/admin/posts/${postId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -122,14 +122,14 @@ const ManagePosts = () => {
     const token = localStorage.getItem('token');
     try {
       if (selectedPost.id) {
-        const response = await axios.put(`http://localhost:3000/admin/posts/${selectedPost.id}`, selectedPost, {
+        const response = await axios.put(`${process.env.REACT_APP_BASE_URL}/admin/posts/${selectedPost.id}`, selectedPost, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
         setPosts(posts.map(post => (post.id === selectedPost.id ? selectedPost : post)));
       } else {
-        const response = await axios.post('http://localhost:3000/admin/posts', selectedPost, {
+        const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/admin/posts`, selectedPost, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -211,7 +211,7 @@ const ManagePosts = () => {
                   <TableCell>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
                       {post.photo_url && post.photo_url.map((url, index) => (
-                        <img key={index} src={`http://localhost:3000${url}`} alt={post.title} style={{ width: '80px', borderRadius: '5px', boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)' }} />
+                        <img key={index} src={`${process.env.REACT_APP_BASE_URL}${url}`} alt={post.title} style={{ width: '80px', borderRadius: '5px', boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)' }} />
                       ))}
                     </div>
                   </TableCell>

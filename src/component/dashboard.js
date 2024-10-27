@@ -46,7 +46,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/admin/dashboard', {
+        const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/admin/dashboard`, {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         });
         setNewUsersData(response.data.new_users_per_day);

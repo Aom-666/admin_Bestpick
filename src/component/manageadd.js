@@ -66,7 +66,7 @@ const ManageAds = () => {
   const handleDelete = async (adId) => {
     const token = localStorage.getItem('token');
     try {
-      await axios.delete(`http://localhost:3000/ads/${adId}`, {
+      await axios.delete(`${process.env.REACT_APP_BASE_URL}/ads/${adId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -80,7 +80,7 @@ const ManageAds = () => {
   const fetchAds = async () => {
     const token = localStorage.getItem('token');
     try {
-      const response = await axios.get('http://localhost:3000/ads', {
+      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/ads`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -129,7 +129,7 @@ const ManageAds = () => {
     try {
         if (currentAd.id) {
             // Update Ad
-            const response = await axios.put(`http://localhost:3000/ads/${currentAd.id}`, formData, {
+            const response = await axios.put(`${process.env.REACT_APP_BASE_URL}/ads/${currentAd.id}`, formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'multipart/form-data',
@@ -139,7 +139,7 @@ const ManageAds = () => {
             setAds(ads.map(ad => (ad.id === currentAd.id ? { ...ad, status: currentAd.status } : ad)));
         } else {
             // Create new Ad
-            const response = await axios.post('http://localhost:3000/ads', formData, {
+            const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/ads`, formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'multipart/form-data',
@@ -227,7 +227,7 @@ const ManageAds = () => {
               <TableRow key={ad.id}>
                 <TableCell>
                   <img
-                    src={`http://localhost:3000${ad.image}`}
+                    src={`${process.env.REACT_APP_BASE_URL}${ad.image}`}
                     alt={ad.title}
                     style={{ width: '100px', height: 'auto', borderRadius: '5px' }}
                   />

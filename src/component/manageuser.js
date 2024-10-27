@@ -53,7 +53,7 @@ const ManageUsers = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/admin/users');
+      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/admin/users`);
       setUsers(response.data);
     } catch (error) {
       console.error('Error loading users:', error);
@@ -73,7 +73,7 @@ const ManageUsers = () => {
   const handleDeleteUser = async (userId) => {
     const token = localStorage.getItem('token'); // รับ token
     try {
-      await axios.delete(`http://localhost:3000/admin/users/${userId}`, {
+      await axios.delete(`${process.env.REACT_APP_BASE_URL}/admin/users/${userId}`, {
         headers: {
           Authorization: `Bearer ${token}`, // ส่ง token ใน headers
         },
@@ -97,7 +97,7 @@ const ManageUsers = () => {
     try {
       if (selectedUser.id) {
         // Update user status
-        await axios.put(`http://localhost:3000/admin/users/${selectedUser.id}/status`, {
+        await axios.put(`${process.env.REACT_APP_BASE_URL}/admin/users/${selectedUser.id}/status`, {
           status: selectedUser.status,
         }, {
           headers: {

@@ -24,7 +24,7 @@ const Login = () => {
   const handleLogin = async () => {
     try {
       // Send request to API for login
-      const response = await axios.post('http://localhost:3000/admin/login', {
+      const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/admin/login`, {
         email, // Update field to match backend
         password,
       });
