@@ -112,52 +112,56 @@ const ManageAds = () => {
 
     // แปลงค่าของ created_at, updated_at และ expiration_date ให้อยู่ในรูปแบบที่ MySQL คาดหวัง
     if (currentAd.created_at) {
-        formData.append('created_at', new Date(currentAd.created_at).toISOString().slice(0, 19).replace('T', ' '));
+      formData.append('created_at', new Date(currentAd.created_at).toISOString().slice(0, 19).replace('T', ' '));
     }
     if (currentAd.updated_at) {
-        formData.append('updated_at', new Date(currentAd.updated_at).toISOString().slice(0, 19).replace('T', ' '));
+      formData.append('updated_at', new Date(currentAd.updated_at).toISOString().slice(0, 19).replace('T', ' '));
     }
     if (currentAd.expiration_date) {
-        formData.append('expiration_date', new Date(currentAd.expiration_date).toISOString().slice(0, 19).replace('T', ' '));
+      formData.append('expiration_date', new Date(currentAd.expiration_date).toISOString().slice(0, 19).replace('T', ' '));
     }
 
+    // ถ้าผู้ใช้ไม่ได้เลือกไฟล์ใหม่ ให้ใช้ภาพเดิม
     if (imageFile) {
-        formData.append('image', imageFile);
+      formData.append('image', imageFile);
+    } else if (currentAd.image) {
+      // ส่ง URL ของภาพเดิมหรือรูปภาพใหม่ที่อยู่ในฐานข้อมูล
+      formData.append('image', currentAd.image);
     }
 
     console.log('FormData to be sent:', formData); // ตรวจสอบข้อมูลที่ส่งไปยังเซิร์ฟเวอร์
 
     try {
-        if (currentAd.id) {
-            // Update Ad
-            const response = await axios.put(`${process.env.REACT_APP_BASE_URL}/ads/${currentAd.id}`, formData, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
-            console.log('Ad updated successfully:', response.data); // Log การตอบสนองจากเซิร์ฟเวอร์
-            setAds(ads.map(ad => (ad.id === currentAd.id ? { ...ad, status: currentAd.status } : ad)));
-        } else {
-            // Create new Ad
-            const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/ads`, formData, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
-            console.log('Ad created successfully:', response.data); // Log การตอบสนองจากเซิร์ฟเวอร์
-            setAds([...ads, response.data]);
-        }
-        setOpenDialog(false);
+      if (currentAd.id) {
+        // Update Ad
+        const response = await axios.put(`${process.env.REACT_APP_BASE_URL}/ads/${currentAd.id}`, formData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        console.log('Ad updated successfully:', response.data);
+        setAds(ads.map(ad => (ad.id === currentAd.id ? { ...ad, ...currentAd } : ad)));
+      } else {
+        // Create new Ad
+        const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/ads`, formData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        console.log('Ad created successfully:', response.data);
+        setAds([...ads, response.data]);
+      }
+      setOpenDialog(false);
     } catch (error) {
-        if (error.response) {
-            console.error('Error saving ad:', error.response.data); // Log ข้อความผิดพลาดจากเซิร์ฟเวอร์
-        } else {
-            console.error('Error saving ad:', error.message);
-        }
+      if (error.response) {
+        console.error('Error saving ad:', error.response.data);
+      } else {
+        console.error('Error saving ad:', error.message);
+      }
     }
-};
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -228,37 +232,37 @@ const ManageAds = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-            {ads.map((ad) => (
-              <TableRow key={ad.id}>
-                <TableCell>
-                  <img
-                    src={`${process.env.REACT_APP_BASE_URL}${ad.image}`}
-                    alt={ad.title}
-                    style={{ width: '100px', height: 'auto', borderRadius: '5px' }}
-                  />
-                </TableCell>
-                <TableCell>{ad.title}</TableCell>
-                <TableCell>{ad.content}</TableCell>
-                <TableCell>
-                  <a href={ad.link} target="_blank" rel="noopener noreferrer">{ad.link}</a>
-                </TableCell>
-                <TableCell>{new Date(ad.created_at).toLocaleString('en-GB')}</TableCell>
-                <TableCell>{new Date(ad.updated_at).toLocaleString('en-GB')}</TableCell>
-                <TableCell>
-                  {ad.expiration_date ? new Date(ad.expiration_date).toLocaleString('en-GB') : 'N/A'}
-                </TableCell>
-                <TableCell>{ad.status.toLowerCase()}</TableCell>
-                <TableCell>
-                  <IconButton onClick={() => handleEdit(ad)} color="primary">
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton onClick={() => handleDelete(ad.id)} color="error">
-                    <DeleteIcon />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
+              {ads.map((ad) => (
+                <TableRow key={ad.id}>
+                  <TableCell>
+                    <img
+                      src={`${process.env.REACT_APP_BASE_URL}${ad.image}`}
+                      alt={ad.title}
+                      style={{ width: '100px', height: 'auto', borderRadius: '5px' }}
+                    />
+                  </TableCell>
+                  <TableCell>{ad.title}</TableCell>
+                  <TableCell>{ad.content}</TableCell>
+                  <TableCell>
+                    <a href={ad.link} target="_blank" rel="noopener noreferrer">{ad.link}</a>
+                  </TableCell>
+                  <TableCell>{new Date(ad.created_at).toLocaleString('en-GB')}</TableCell>
+                  <TableCell>{new Date(ad.updated_at).toLocaleString('en-GB')}</TableCell>
+                  <TableCell>
+                    {ad.expiration_date ? new Date(ad.expiration_date).toLocaleString('en-GB') : 'N/A'}
+                  </TableCell>
+                  <TableCell>{ad.status.toLowerCase()}</TableCell>
+                  <TableCell>
+                    <IconButton onClick={() => handleEdit(ad)} color="primary">
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton onClick={() => handleDelete(ad.id)} color="error">
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
           </Table>
         </TableContainer>
 
@@ -301,6 +305,17 @@ const ManageAds = () => {
               variant="outlined"
               onChange={(e) => setImageFile(e.target.files[0])}
             />
+
+            {/* แสดงตัวอย่างรูปภาพถ้ามี */}
+            {currentAd && currentAd.image && (
+              <img
+                src={`${process.env.REACT_APP_BASE_URL}${currentAd.image}`} // ใช้ URL ของภาพที่จัดเก็บไว้ใน currentAd
+                alt="Ad Preview"
+                style={{ width: '100%', height: 'auto', borderRadius: '5px', marginTop: '10px' }}
+              />
+            )}
+
+            {/* ฟิลด์อื่น ๆ */}
             <TextField
               margin="dense"
               label="Created At"
