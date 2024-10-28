@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.1 (Python 3.12.6 on win32)" generated="2024-10-28T12:31:34.875049" rpa="false" schemaversion="5">
+<suite id="s1" name="Manageadd" source="C:\Users\pongp\.vscode\admin_Bestpick\manageadd.robot">
+<test id="s1-t1" name="Add New Ad Should Succeed" line="19">
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2024-10-28T12:31:35.094418" level="INFO">Opening browser 'Chrome' to base url 'http://localhost:3001/login'.</msg>
+<arg>${LOGIN_URL}</arg>
+<arg>Chrome</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="PASS" start="2024-10-28T12:31:35.092848" elapsed="2.318434"/>
+</kw>
+<kw name="Maximize Browser Window" owner="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="PASS" start="2024-10-28T12:31:37.412282" elapsed="0.048021"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2024-10-28T12:31:37.461023" level="INFO">Typing text 'earthsrichok31@gmail.com' into text field 'xpath=//input[@aria-invalid="false" and @type="text"]'.</msg>
+<arg>xpath=//input[@aria-invalid="false" and @type="text"]</arg>
+<arg>${VALID_EMAIL}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2024-10-28T12:31:37.460303" elapsed="0.294160"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2024-10-28T12:31:37.755466" level="INFO">Typing text '1234' into text field 'xpath=//input[@aria-invalid="false" and @type="password"]'.</msg>
+<arg>xpath=//input[@aria-invalid="false" and @type="password"]</arg>
+<arg>${VALID_PASSWORD}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2024-10-28T12:31:37.755466" elapsed="0.076614"/>
+</kw>
+<kw name="Click Button" owner="SeleniumLibrary">
+<msg time="2024-10-28T12:31:37.833080" level="INFO">Clicking button 'xpath=//button[contains(., 'Login')]'.</msg>
+<arg>xpath=//button[contains(., 'Login')]</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<status status="PASS" start="2024-10-28T12:31:37.832080" elapsed="0.065514"/>
+</kw>
+<kw name="Wait Until Page Contains" owner="SeleniumLibrary">
+<arg>Welcome, Admin</arg>
+<arg>timeout=10s</arg>
+<doc>Waits until ``text`` appears on the current page.</doc>
+<status status="PASS" start="2024-10-28T12:31:37.898594" elapsed="0.220389"/>
+</kw>
+<kw name="Go To" owner="SeleniumLibrary">
+<msg time="2024-10-28T12:31:38.120067" level="INFO">Opening url 'http://localhost:3001/manageadd'</msg>
+<arg>${MANAGE_ADD_URL}</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<status status="PASS" start="2024-10-28T12:31:38.120067" elapsed="0.160158"/>
+</kw>
+<kw name="Wait Until Page Contains" owner="SeleniumLibrary">
+<arg>Manage Ads</arg>
+<arg>timeout=10s</arg>
+<doc>Waits until ``text`` appears on the current page.</doc>
+<status status="PASS" start="2024-10-28T12:31:38.281217" elapsed="0.075928"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2024-10-28T12:31:38.358140" level="INFO">Clicking element 'xpath=//a[@href="/add"]'.</msg>
+<arg>xpath=//a[@href="/add"]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2024-10-28T12:31:38.358140" elapsed="0.120344"/>
+</kw>
+<kw name="Wait Until Page Contains" owner="SeleniumLibrary">
+<arg>Add Ad</arg>
+<arg>timeout=10s</arg>
+<doc>Waits until ``text`` appears on the current page.</doc>
+<status status="PASS" start="2024-10-28T12:31:38.479483" elapsed="0.020002"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2024-10-28T12:31:38.500559" level="INFO">Typing text 'Kingston SSD' into text field 'xpath=//input[@name="title"]'.</msg>
+<arg>xpath=//input[@name="title"]</arg>
+<arg>${TITLE}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2024-10-28T12:31:38.499485" elapsed="0.215601"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2024-10-28T12:31:38.717090" level="INFO">Typing text 'Kingston NV2 PCIe 4.0 NVMe SSD' into text field 'xpath=//input[@name="content"]'.</msg>
+<arg>xpath=//input[@name="content"]</arg>
+<arg>${CONTENT}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2024-10-28T12:31:38.716088" elapsed="0.345720"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2024-10-28T12:31:39.061808" level="INFO">Typing text 'https://www.example.com' into text field 'xpath=//input[@name="link"]'.</msg>
+<arg>xpath=//input[@name="link"]</arg>
+<arg>${LINK}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2024-10-28T12:31:39.061808" elapsed="0.250033"/>
+</kw>
+<kw name="Choose File" owner="SeleniumLibrary">
+<msg time="2024-10-28T12:31:39.311841" level="INFO">Sending C:\Users\pongp\Pictures\Saved Pictures\kingston-nm2-500gb-2-square_medium.webp to browser.</msg>
+<arg>xpath=//input[@type="file"]</arg>
+<arg>${IMAGE_PATH}</arg>
+<doc>Inputs the ``file_path`` into the file input field ``locator``.</doc>
+<status status="PASS" start="2024-10-28T12:31:39.311841" elapsed="0.037670"/>
+</kw>
+<kw name="Execute Javascript" owner="SeleniumLibrary">
+<msg time="2024-10-28T12:31:39.350521" level="INFO">Executing JavaScript:
+document.querySelector('input[name="created_at"]').value = "2024-10-27T14:00"
+Without any arguments.</msg>
+<arg>document.querySelector('input[name="created_at"]').value = "${CREATED_AT}"</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<status status="PASS" start="2024-10-28T12:31:39.349511" elapsed="0.009376"/>
+</kw>
+<kw name="Execute Javascript" owner="SeleniumLibrary">
+<msg time="2024-10-28T12:31:39.359889" level="INFO">Executing JavaScript:
+document.querySelector('input[name="updated_at"]').value = "2024-10-27T14:10"
+Without any arguments.</msg>
+<arg>document.querySelector('input[name="updated_at"]').value = "${UPDATED_AT}"</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<status status="PASS" start="2024-10-28T12:31:39.358887" elapsed="0.008003"/>
+</kw>
+<kw name="Execute Javascript" owner="SeleniumLibrary">
+<msg time="2024-10-28T12:31:39.367902" level="INFO">Executing JavaScript:
+document.querySelector('input[name="expiration_date"]').value = "2024-11-30"
+Without any arguments.</msg>
+<arg>document.querySelector('input[name="expiration_date"]').value = "${EXPIRATION_DATE}"</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<status status="PASS" start="2024-10-28T12:31:39.367902" elapsed="0.006563"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2024-10-28T12:31:39.375468" level="INFO">Clicking element 'id=mui-component-select-status'.</msg>
+<arg>id=mui-component-select-status</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2024-10-28T12:31:39.374465" elapsed="0.055774"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2024-10-28T12:31:40.431695" level="INFO">Slept 1 second.</msg>
+<arg>1s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2024-10-28T12:31:39.431304" elapsed="1.000391"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2024-10-28T12:31:40.431695" level="INFO">Clicking element 'xpath=//li[@data-value="active"]'.</msg>
+<arg>xpath=//li[@data-value="active"]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2024-10-28T12:31:40.431695" elapsed="0.046594"/>
+</kw>
+<kw name="Click Button" owner="SeleniumLibrary">
+<msg time="2024-10-28T12:31:40.479298" level="INFO">Clicking button 'xpath=//button[contains(., 'Add Ad')]'.</msg>
+<arg>xpath=//button[contains(., 'Add Ad')]</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<status status="PASS" start="2024-10-28T12:31:40.479298" elapsed="0.287195"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2024-10-28T12:31:42.766944" level="INFO">Slept 2 seconds.</msg>
+<arg>2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2024-10-28T12:31:40.766493" elapsed="2.000451"/>
+</kw>
+<kw name="Wait Until Page Contains" owner="SeleniumLibrary">
+<msg time="2024-10-28T12:31:57.944388" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-14.png"&gt;&lt;img src="selenium-screenshot-14.png" width="800px"&gt;&lt;/a&gt;</msg>
+<msg time="2024-10-28T12:31:57.944388" level="FAIL">Text 'Kingston SSD' did not appear in 15 seconds.</msg>
+<arg>${TITLE}</arg>
+<arg>timeout=15s</arg>
+<doc>Waits until ``text`` appears on the current page.</doc>
+<status status="FAIL" start="2024-10-28T12:31:42.767989" elapsed="15.178401">Text 'Kingston SSD' did not appear in 15 seconds.</status>
+</kw>
+<kw name="Close Browser" owner="SeleniumLibrary" type="TEARDOWN">
+<doc>Closes the current browser.</doc>
+<status status="PASS" start="2024-10-28T12:31:57.947387" elapsed="2.145097"/>
+</kw>
+<doc>ทดสอบการล็อกอินและเพิ่มโฆษณาใหม่</doc>
+<status status="FAIL" start="2024-10-28T12:31:35.091837" elapsed="25.001649">Text 'Kingston SSD' did not appear in 15 seconds.</status>
+</test>
+<status status="FAIL" start="2024-10-28T12:31:34.876303" elapsed="25.221187"/>
+</suite>
+<statistics>
+<total>
+<stat pass="0" fail="1" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="0" fail="1" skip="0" id="s1" name="Manageadd">Manageadd</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
