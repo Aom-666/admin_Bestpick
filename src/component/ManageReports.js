@@ -80,6 +80,23 @@ const ManageReportedPosts = () => {
     }
   };
 
+  const handleUpdatePostStatus = async (postId) => {
+    const token = localStorage.getItem('token');
+    try {
+      await axios.put(`${process.env.REACT_APP_BASE_URL}/admin/update/poststatus`, {
+        id: postId,
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      // After successfully updating the post status, fetch the reported posts again
+      fetchReportedPosts();
+    } catch (error) {
+      console.error('Error updating post status:', error);
+    }
+  };
+
   const handleMenuClick = () => {
     setIsDrawerOpen(true);
   };
@@ -98,28 +115,38 @@ const ManageReportedPosts = () => {
     setOpenDialog(true);
   };
 
-  const handleSave = async () => {
-    const token = localStorage.getItem('token');
-    try {
-      const response = await axios.put(`${process.env.REACT_APP_BASE_URL}/admin/reports/${selectedPost.report_id}`, {
-        status: selectedPost.status
-      }, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setReportedPosts(reportedPosts.map(report => 
-        report.report_id === selectedPost.report_id ? { ...report, status: selectedPost.status } : report
-      ));
-      setOpenDialog(false);
-    } catch (error) {
-      if (error.response) {
-        console.error('Error updating report status:', error.response.data);
-      } else {
-        console.error('Error updating report status:', error.message);
-      }
+const handleSave = async () => {
+  const token = localStorage.getItem('token');
+  try {
+    // อัปเดตสถานะของรายงานก่อน
+    const response = await axios.put(`${process.env.REACT_APP_BASE_URL}/admin/reports/${selectedPost.report_id}`, {
+      status: selectedPost.status
+    }, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    // หากเลือกสถานะ "Block", อัปเดตสถานะโพสต์
+    if (selectedPost.status === 'block') {
+      await handleUpdatePostStatus(selectedPost.post_id); 
     }
-  };
+
+    // อัปเดตสถานะในตารางรายงาน
+    setReportedPosts(reportedPosts.map(report => 
+      report.report_id === selectedPost.report_id ? { ...report, status: selectedPost.status } : report
+    ));
+
+    setOpenDialog(false);
+  } catch (error) {
+    if (error.response) {
+      console.error('Error updating report status:', error.response.data);
+    } else {
+      console.error('Error updating report status:', error.message);
+    }
+  }
+};
+
 
   return (
     <Box sx={{ width: '100%', minHeight: '100vh', backgroundColor: '#f5f5f5' }}>
