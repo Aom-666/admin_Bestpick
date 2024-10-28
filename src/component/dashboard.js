@@ -20,6 +20,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import PeopleIcon from '@mui/icons-material/People';
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
+import CategoryIcon from '@mui/icons-material/Category';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import axios from 'axios';
@@ -132,6 +133,10 @@ const totalPostChartData = {
             <ListItem button component={Link} to="/manage-reported-posts" sx={{ color: '#fff' }}>
               <ReportProblemIcon sx={{ mr: 1 }} />
               <ListItemText primary="Report posts" />
+            </ListItem>
+            <ListItem button component={Link} to="/managecategories" sx={{ color: '#fff' }}>
+              <CategoryIcon sx={{ mr: 1 }} />
+              <ListItemText primary="Manage Categories" />
             </ListItem>
           </List>
         </Box>

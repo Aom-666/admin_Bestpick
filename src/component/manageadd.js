@@ -10,6 +10,7 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 import MenuIcon from '@mui/icons-material/Menu';
+import CategoryIcon from '@mui/icons-material/Category';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DashboardIcon from '@mui/icons-material/Dashboard';
@@ -198,6 +199,10 @@ const ManageAds = () => {
             <ListItem button component={Link} to="/manage-reported-posts" sx={{ color: '#fff' }}>
               <ReportProblemIcon sx={{ mr: 1 }} />
               <ListItemText primary="Report posts" />
+            </ListItem>
+            <ListItem button component={Link} to="/managecategories" sx={{ color: '#fff' }}>
+              <CategoryIcon sx={{ mr: 1 }} />
+              <ListItemText primary="Manage Categories" />
             </ListItem>
           </List>
         </Box>

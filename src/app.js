@@ -8,6 +8,7 @@ import ManageAds from './component/manageadd';
 import ManageUsers from './component/manageuser';
 import ManagePosts from './component/managepost';
 import ManageReportedPosts from './component/ManageReports';
+import ManageCategories from './component/ManageCategories';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path='/manageadd' element={<ManageAds />} />
           <Route path='/managepost' element={<ManagePosts />} />     
           <Route path="/manage-reported-posts" element={<ManageReportedPosts />} />
+          <Route path="/managecategories" element={<ManageCategories/>}/>
         </Routes>
       </AuthProvider>
     </Router>

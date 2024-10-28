@@ -33,6 +33,7 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import CategoryIcon from '@mui/icons-material/Category';
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import PeopleIcon from '@mui/icons-material/People';
@@ -187,6 +188,10 @@ const ManagePosts = () => {
             <ListItem button component={Link} to="/manage-reported-posts" sx={{ color: '#fff' }}>
               <ReportProblemIcon sx={{ mr: 1 }} />
               <ListItemText primary="Report posts" />
+            </ListItem>
+            <ListItem button component={Link} to="/managecategories" sx={{ color: '#fff' }}>
+              <CategoryIcon sx={{ mr: 1 }} />
+              <ListItemText primary="Manage Categories" />
             </ListItem>
           </List>
         </Box>
