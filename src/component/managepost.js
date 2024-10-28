@@ -272,7 +272,7 @@ const ManagePosts = () => {
                 onChange={(e) => setSelectedPost({ ...selectedPost, status: e.target.value })}
               >
                 <MenuItem value="active">Active</MenuItem>
-                <MenuItem value="inactive">Inactive</MenuItem>
+                <MenuItem value="deactive">Deactive</MenuItem>
               </Select>
             </FormControl>
           </DialogContent>
