@@ -187,10 +187,7 @@ const ManageReportedPosts = () => {
                   <TableCell>
                     <IconButton onClick={() => handleEdit(report)} color="primary">
                       <EditIcon />
-                    </IconButton>
-                    <IconButton onClick={() => handleDelete(report.report_id)} color="error">
-                      <DeleteIcon />
-                    </IconButton>
+                    </IconButton>                    
                   </TableCell>
                 </TableRow>
               ))}
