@@ -135,6 +135,7 @@ const ManagePosts = () => {
             Authorization: `Bearer ${token}`,
           },
         });
+        console.log(response.data);
         setPosts([...posts, response.data]);
       }
       setOpenDialog(false);
@@ -248,8 +249,8 @@ const ManagePosts = () => {
               type="text"
               fullWidth
               variant="outlined"
-              value={selectedPost?.title || ''}
-              onChange={(e) => setSelectedPost({ ...selectedPost, title: e.target.value })}
+              value={selectedPost?.Title || ''}
+              onChange={(e) => setSelectedPost({ ...selectedPost, Title: e.target.value })}
             />
             <TextField
               margin="dense"
