@@ -3,7 +3,7 @@ import React from 'react';
 const AccountDeletion = () => {
   return (
     <div style={{ padding: '20px' }}>
-      <h1>Request Account and Data Deletion for [App Name]</h1>
+      <h1>Request Account and Data Deletion for [BestPick]</h1>
       <p>If you wish to delete your account and associated data, please follow the steps below:</p>
       <ol>
         <li>
