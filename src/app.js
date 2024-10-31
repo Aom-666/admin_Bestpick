@@ -9,6 +9,7 @@ import ManageUsers from './component/manageuser';
 import ManagePosts from './component/managepost';
 import ManageReportedPosts from './component/ManageReports';
 import ManageCategories from './component/ManageCategories';
+import PrivacyPolicy from './component/PrivacyPolicy';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path='/managepost' element={<ManagePosts />} />     
           <Route path="/manage-reported-posts" element={<ManageReportedPosts />} />
           <Route path="/managecategories" element={<ManageCategories/>}/>
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         </Routes>
       </AuthProvider>
     </Router>
