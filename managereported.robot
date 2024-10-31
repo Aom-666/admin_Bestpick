@@ -5,7 +5,7 @@ Library    SeleniumLibrary
 ${LOGIN_URL}                  https://www.bestpickbp.com/login
 ${MANAGE_REPORTED_POSTS_URL}  https://www.bestpickbp.com/manage-reported-posts
 ${VALID_EMAIL}                earthsrichok31@gmail.com
-${VALID_PASSWORD}             1234
+${VALID_PASSWORD}             bestpick7890
 ${NEW_STATUS}                 Block              # สถานะใหม่ที่ต้องการเซ็ต
 
 *** Keywords ***

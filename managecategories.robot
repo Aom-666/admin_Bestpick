@@ -5,7 +5,7 @@ Library    SeleniumLibrary
 ${LOGIN_URL}              https://www.bestpickbp.com/login
 ${BASE_URL}               https://www.bestpickbp.com/managecategories
 ${VALID_EMAIL}            earthsrichok31@gmail.com
-${VALID_PASSWORD}         1234
+${VALID_PASSWORD}         bestpick7890
 ${CATEGORY_NAME}          Mouse  # ชื่อของ Category ที่ต้องการเพิ่ม
 
 *** Keywords ***

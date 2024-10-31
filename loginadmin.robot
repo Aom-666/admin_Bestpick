@@ -2,9 +2,9 @@
 Library    SeleniumLibrary
 
 *** Variables ***
-${URL}               http://localhost:3001                    # URL ของหน้าเว็บล็อกอิน
+${URL}               https://www.bestpickbp.com                   # URL ของหน้าเว็บล็อกอิน
 ${VALID_EMAIL}       earthsrichok31@gmail.com                 # Email ที่ถูกต้อง
-${VALID_PASSWORD}    1234                                     # Password ที่ถูกต้อง
+${VALID_PASSWORD}    bestpick7890                                    # Password ที่ถูกต้อง
 ${INVALID_PASSWORD}  12345                                    # Password ที่ไม่ถูกต้อง
 
 *** Test Cases ***

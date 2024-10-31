@@ -5,11 +5,11 @@ Library    SeleniumLibrary
 ${LOGIN_URL}             https://www.bestpickbp.com/login
 ${MANAGE_ADD_URL}        https://www.bestpickbp.com/manageadd
 ${VALID_EMAIL}           earthsrichok31@gmail.com
-${VALID_PASSWORD}        1234
+${VALID_PASSWORD}        bestpick7890
 ${TITLE}                 Kingston SSD
 ${CONTENT}               SSD M.2 PCIe 250GB (3Y) Kingston NV1 (SNVS/250G)
 ${LINK}                  https://www.advice.co.th
-${IMAGE_PATH}            C:\\Users\\pongp\\Pictures\\Saved Pictures\\A0140568OK_BIG_1.jpg
+${IMAGE_PATH}            C:\\Users\\earth\\Pictures\\test101.jpg
 ${CREATED_AT}            2024-10-27T14:00
 ${UPDATED_AT}            2024-10-27T14:10
 ${EXPIRATION_DATE}       11/30/2024 

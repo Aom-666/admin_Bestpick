@@ -5,7 +5,7 @@ Library    SeleniumLibrary
 ${LOGIN_URL}         https://www.bestpickbp.com/login
 ${MANAGE_USER_URL}   https://www.bestpickbp.com/manageuser
 ${VALID_EMAIL}       earthsrichok31@gmail.com
-${VALID_PASSWORD}    1234
+${VALID_PASSWORD}    bestpick7890
 ${USER_ID}           870001               # ID ของผู้ใช้ที่ต้องการแก้ไข
 ${DEACTIVE_STATUS}   Deactive             # ค่าใหม่ของสถานะที่ต้องการเซ็ต
 ${ACTIVE_STATUS}     Active               # ค่าเริ่มต้นของสถานะที่ต้องการเซ็ตกลับ
