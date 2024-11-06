@@ -5,99 +5,137 @@ const PrivacyPolicy = () => {
     <div style={{ padding: '20px' }}>
       <h1>Privacy Policy</h1>
       <p>Last updated: October 28, 2024</p>
+      
       <p>
-        This Privacy Policy explains our policies and procedures on the
-        collection, use, and disclosure of your information when you use the
-        Service and informs you about your privacy rights and how the law
-        protects you. We use your personal data to provide and improve the
-        Service. By using this Service, you agree to the collection and use of
-        information in accordance with this Privacy Policy. This Privacy Policy
-        was created with BestPick.
+        This Privacy Policy explains our policies and procedures on the collection, use, and disclosure of your 
+        information when you use our Service. It also informs you about your privacy rights and how the law protects 
+        you. By using this Service, you agree to the collection and use of information in accordance with this 
+        Privacy Policy.
       </p>
+      
+      <section>
+        <h2>Definitions</h2>
+        <p><strong>Account:</strong> A unique account created for you to access our Service.</p>
+        <p><strong>Company:</strong> BestPick (referred to as "we," "us," or "our").</p>
+        <p><strong>Country:</strong> Thailand.</p>
+        <p><strong>Device:</strong> Any internet-connected device (e.g., smartphone, tablet, or computer) that can access our Service.</p>
+        <p><strong>Personal Data:</strong> Information that identifies or relates to an identifiable individual (e.g., name, email).</p>
+        <p><strong>Service:</strong> Our mobile or web application.</p>
+        <p><strong>Service Provider:</strong> External companies or individuals that provide services to help deliver our Service (e.g., hosting, analytics).</p>
+        <p><strong>Third-party Social Media Service:</strong> External social media networks users may log in through (e.g., Facebook, Google).</p>
+        <p><strong>Usage Data:</strong> Data collected automatically (e.g., app usage duration, page views).</p>
+        <p><strong>You:</strong> The individual using our Service.</p>
+      </section>
 
-      <h2>Interpretation and Definitions</h2>
-      <p>
-        Words with an initial capital letter have meanings defined under the
-        following conditions. These definitions will have the same meaning
-        regardless of whether they appear in singular or plural form.
-      </p>
-      <ul>
-        <li>
-          <strong>Account</strong>: a unique account created for you to access our Service.
-        </li>
-        <li>
-          <strong>Company</strong>: refers to BestPick (referred to as "the Company",
-          "we", "us", or "our" in this Agreement).
-        </li>
-        <li><strong>Country</strong>: Thailand.</li>
-        <li><strong>Device</strong>: any device that can access the Service.</li>
-        <li>
-          <strong>Personal Data</strong>: any information relating to an identifiable individual.
-        </li>
-        <li><strong>Service</strong>: refers to the application.</li>
-        <li>
-          <strong>Service Provider</strong>: any natural or legal person processing data on behalf of the Company.
-        </li>
-        <li>
-          <strong>Third-party Social Media Service</strong>: websites or social networks through which a user can log
-          in or create an account to use the Service.
-        </li>
-        <li><strong>Usage Data</strong>: data collected automatically from the Service infrastructure.</li>
-        <li><strong>You</strong>: the individual accessing or using the Service.</li>
-      </ul>
+      <section>
+        <h2>Information We Collect</h2>
+        <p>
+          We collect different types of information to improve the user experience and deliver our Service. The types of data collected include:
+        </p>
+        <ul>
+          <li><strong>Personal Data:</strong> Information you provide directly, such as name, email, and contact details.</li>
+          <li><strong>Usage Data:</strong> Information about how you access and use the Service, such as IP address, browser type, and pages viewed.</li>
+          <li><strong>Interaction Data:</strong> Data on interactions within the Service, like buttons clicked and actions performed.</li>
+          <li><strong>Device Data:</strong> Technical details, such as device type and operating system, to ensure compatibility and optimize performance.</li>
+          <li><strong>Social Media Service Data:</strong> Information shared through external social media if you log in using such services.</li>
+        </ul>
+      </section>
 
-      <h2>Collection and Use of Your Personal Data</h2>
-      <p>
-        We collect several types of information from our users to provide and
-        improve the Service experience. Collected data includes Personal Data,
-        Usage Data, Interaction Data, Device Data, and Social Media Service
-        Data.
-      </p>
+      <section>
+        <h2>How We Use Your Information</h2>
+        <p>
+          We use the collected information to:
+        </p>
+        <ul>
+          <li>Provide and maintain our Service, including creating and managing user accounts.</li>
+          <li>Personalize your experience, based on preferences and past interactions.</li>
+          <li>Communicate updates, offers, or security alerts.</li>
+          <li>Fulfill contractual obligations or process transactions.</li>
+          <li>Analyze usage to improve the quality and features of our Service.</li>
+        </ul>
+      </section>
 
-      <h2>Use of Your Personal Data</h2>
-      <p>
-        The Company may use Personal Data for various purposes, including
-        providing and maintaining the Service, managing your account, fulfilling
-        contractual obligations, contacting you, handling requests, and other
-        business-related activities.
-      </p>
+      <section>
+        <h2>Sharing Your Information</h2>
+        <p>
+          We only share your information in specific situations, including:
+        </p>
+        <ul>
+          <li>With <strong>Service Providers</strong> who assist in delivering our Service (e.g., cloud storage, payment processing).</li>
+          <li>In <strong>business transfers</strong> in the event of a merger, acquisition, or sale of assets.</li>
+          <li>With <strong>affiliates and business partners</strong> for marketing, analytics, or service improvements (with your consent where required).</li>
+          <li>With <strong>your consent</strong> if you have explicitly agreed to share your data with a specific third party.</li>
+        </ul>
+      </section>
 
-      <h2>Sharing Your Personal Data</h2>
-      <p>
-        We may share your data in specific situations, including with Service
-        Providers, business transfers, affiliates, business partners, and with
-        your consent.
-      </p>
+      <section>
+        <h2>Retention of Your Personal Data</h2>
+        <p>
+          We retain your data only for as long as needed to provide our Service or meet legal obligations. For instance:
+        </p>
+        <ul>
+          <li>Account information is kept until your account is deleted or as required by law.</li>
+          <li>Usage Data may be retained for analytics purposes, typically for a shorter period unless used for security or legal purposes.</li>
+        </ul>
+      </section>
 
-      <h2>Retention of Your Personal Data</h2>
-      <p>
-        The Company retains data only as necessary to fulfill purposes outlined
-        in this Privacy Policy.
-      </p>
+      <section>
+        <h2>Security of Your Personal Data</h2>
+        <p>
+          We take reasonable security measures to protect your data, including encryption and access controls. However, no method of transmission is completely secure, and we cannot guarantee absolute security.
+        </p>
+      </section>
 
-      <h2>Security of Your Personal Data</h2>
-      <p>
-        While we aim to protect your Personal Data, no method of transmission is
-        completely secure.
-      </p>
+      <section>
+        <h2>Children’s Privacy</h2>
+        <p>
+          Our Service is not intended for children under 13. We do not knowingly collect data from children under 13. If we become aware that we have collected data from a child under 13, we will delete it.
+        </p>
+      </section>
 
-      <h2>Children’s Privacy</h2>
-      <p>
-        Our Service does not address anyone under 13, and we do not knowingly
-        collect data from children under 13.
-      </p>
+      <section>
+        <h2>Links to Other Websites</h2>
+        <p>
+          Our Service may link to external websites, which are not operated by us. We advise you to review the privacy policies of these sites.
+        </p>
+      </section>
 
-      <h2>Links to Other Websites</h2>
-      <p>
-        Our Service may contain links to third-party websites, and we advise you
-        to review their privacy policies.
-      </p>
+      <section>
+        <h2>Your Rights Regarding Your Personal Data</h2>
+        <p>
+          You have rights under data protection laws, including the right to:
+        </p>
+        <ul>
+          <li>Access, correct, or delete your personal data.</li>
+          <li>Request restriction or object to processing.</li>
+          <li>Withdraw consent at any time (this may limit certain functionalities).</li>
+        </ul>
+        <p>
+          To exercise these rights, contact us using the information provided below.
+        </p>
+      </section>
 
-      <h2>Changes to This Privacy Policy</h2>
-      <p>
-        We may update our Privacy Policy periodically. We will notify you of any
-        changes by posting the new Privacy Policy on this page.
-      </p>
+      <section>
+        <h2>Consent and Withdrawal of Consent</h2>
+        <p>
+          By using our Service, you consent to this Privacy Policy. You may withdraw consent by contacting us. Note that this may limit certain Service functionalities.
+        </p>
+      </section>
+
+      <section>
+        <h2>Notification of Changes</h2>
+        <p>
+          We will notify you of significant changes to this Privacy Policy via email or other appropriate means.
+        </p>
+      </section>
+
+      <section>
+        <h2>Contact Information</h2>
+        <p>
+          If you have questions or concerns about this Privacy Policy, please contact us at:<br />
+          Email: <a href="mailto:bestpick050@gmail.com">bestpick050@gmail.com</a>
+        </p>
+      </section>
     </div>
   );
 };
